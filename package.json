@@ -1,0 +1,29 @@
+{
+  "name": "@wpkg/slider-verify",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/verify.common.js",
+  "module": "dist/verify.esm.js",
+  "umd": "dist/verify.umd.js",
+  "scripts": {
+    "dev": "rollup -c rollup.config.js --watch",
+    "build": "set NODE_ENV=production&& rollup -c rollup.config.js",
+    "lint": "eslint --fix",
+    "test": "jest"
+  },
+  "repository": "https://github.com/wjw99830/slider-verify.git",
+  "author": "wjw",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "eslint": "^6.0.1",
+    "jest": "^24.8.0",
+    "rollup": "^1.17.0",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript2": "^0.22.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
+  }
+}

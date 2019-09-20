@@ -1,0 +1,6 @@
+test
+node_modules
+.eslintrc
+*cache
+*.config.*
+yarn*
