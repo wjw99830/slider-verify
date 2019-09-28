@@ -116,11 +116,10 @@
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(imageElm, 0, 0, 1920, 1080, 0, 0, width, height);
-          this.gap();
+          this.gap(ctx);
           ctx.drawImage(puzzle, opx, opy);
       }
-      gap() {
-          const ctx = this.canvas.getContext('2d');
+      gap(ctx) {
           createPuzzlePath(ctx, this.gapx, this.gapy, this.lineLength);
           ctx.strokeStyle = '#bdbdbd';
           ctx.fillStyle = '#fff';
@@ -140,6 +139,16 @@
               ctx.stroke();
               ctx.clip();
               ctx.drawImage(this.imageElm, 0, 0, 1920, 1080, 0, 0, width, height);
+              ctx.save();
+              ctx.globalCompositeOperation = 'source-atop';
+              const blur = 2;
+              createPuzzlePath(ctx, this.gapx + blur, this.gapy + blur * 1.2, this.lineLength - blur / 1.5);
+              ctx.shadowColor = 'rgba(0, 0, 0, 1)';
+              ctx.shadowBlur = blur * 10;
+              ctx.fillStyle = '#fff';
+              ctx.lineWidth = 1;
+              ctx.fill();
+              ctx.restore();
               resolve(canvas);
           });
           return promise;

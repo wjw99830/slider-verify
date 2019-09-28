@@ -93,11 +93,10 @@ export class SliderVerify {
     canvas.width = width;
     canvas.height = height;
     ctx.drawImage(imageElm, 0, 0, 1920, 1080, 0, 0, width, height);
-    this.gap();
+    this.gap(ctx);
     ctx.drawImage(puzzle, opx, opy);
   }
-  gap() {
-    const ctx = this.canvas.getContext('2d');
+  gap(ctx: CanvasRenderingContext2D) {
     createPuzzlePath(ctx, this.gapx, this.gapy, this.lineLength);
     ctx.strokeStyle = '#bdbdbd';
     ctx.fillStyle = '#fff';
@@ -117,6 +116,16 @@ export class SliderVerify {
       ctx.stroke();
       ctx.clip();
       ctx.drawImage(this.imageElm, 0, 0, 1920, 1080, 0, 0, width, height);
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-atop';
+      const blur = 2;
+      createPuzzlePath(ctx, this.gapx + blur, this.gapy + blur * 1.2, this.lineLength - blur / 1.5);
+      ctx.shadowColor = 'rgba(0, 0, 0, 1)';
+      ctx.shadowBlur = blur * 10;
+      ctx.fillStyle = '#fff';
+      ctx.lineWidth = 1;
+      ctx.fill();
+      ctx.restore();
       resolve(canvas);
     });
     return promise;
@@ -161,6 +170,39 @@ function createPuzzlePath(
   ctx.arc   (sx, sy + 1.5 * lineLength, lineLength / 2, PI / 2, -PI / 2);
   ctx.moveTo(sx, sy + 1 * lineLength);
   ctx.lineTo(sx, sy);
+
+  ctx.closePath();
+}
+function createPuzzlePathAnti(
+  ctx: CanvasRenderingContext2D,
+  sx: number,
+  sy: number,
+  lineLength: number,
+) {
+  ctx.beginPath();
+
+  ctx.moveTo(sx, sy + 2 * lineLength);
+
+  ctx.moveTo(sx, sy);
+  ctx.lineTo(sx + 1 * lineLength, sy);
+  ctx.arc   (sx + 1.5 * lineLength, sy, lineLength / 2, PI, 2 * PI, true);
+  // ctx.moveTo(sx + 2 * lineLength, sy);
+  ctx.lineTo(sx + 3 * lineLength, sy);
+
+  ctx.lineTo(sx + 3 * lineLength, sy + lineLength);
+  ctx.arc   (sx + 3 * lineLength, sy + 1.5 * lineLength, lineLength / 2, -PI / 2, -3 * PI / 2, true);
+  // ctx.moveTo(sx + 3 * lineLength, sy + 2 * lineLength);
+  ctx.lineTo(sx + 3 * lineLength, sy + 3 * lineLength);
+
+  ctx.lineTo(sx + 2 * lineLength, sy + 3 * lineLength);
+  ctx.arc   (sx + 1.5 * lineLength, sy + 3 * lineLength, lineLength / 2, 0, PI);
+  // ctx.moveTo(sx + 1 * lineLength, sy + 3 * lineLength);
+  ctx.lineTo(sx, sy + 3 * lineLength);
+
+  ctx.lineTo(sx, sy + 2 * lineLength);
+  ctx.arc   (sx, sy + 1.5 * lineLength, lineLength / 2, PI / 2, -PI / 2);
+  ctx.moveTo(sx, sy + 1 * lineLength);
+  ctx.lineTo(sx, sy)
 
   ctx.closePath();
 }
